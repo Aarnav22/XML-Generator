@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XML Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #3f51b5, #9c27b0, #e91e63);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-top: 4rem;
+            max-width: 600px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        .excel-icon {
+            font-size: 4rem;
+            color: #217346;
+        }
+        .hidden { display: none; }
+        .progress-bar {
+            background: linear-gradient(to right, #3f51b5, #e91e63);
+        }
+    </style>
+</head>
+<body>
+<div class="container text-center">
+    <h1 class="mb-4" style="color: #3f51b5;">XML Converter</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="data_type" class="form-label fw-bold">Select Data Type</label>
+            <select id="data_type" name="data_type" class="form-select" required onchange="toggleFields()">
+                <option value="" disabled selected>Select One</option>
+                <option value="group">Group (PersonIDs)</option>
+                <option value="individual">Individual</option>
+            </select>
+        </div>
+
+        <div id="individual-options" class="mb-3 hidden">
+            <label class="form-label fw-bold">For Individual, select identifier type:</label>
+            <select name="identifier_type" class="form-select">
+                <option value="proposal">Proposal Number</option>
+                <option value="policy">Policy Number</option>
+            </select>
+        </div>
+
+        <div class="mb-3 text-center">
+            <label class="form-label fw-bold">Upload Excel File</label>
+            <div>
+                <i class="bi bi-file-earmark-excel excel-icon"></i>
+                <input type="file" name="excel" accept=".xlsx" class="form-control mt-2" required />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Submit</button>
+
+        <div id="progress-bar-wrapper" class="mt-4 hidden">
+            <p class="fw-bold">Processing... Please wait.</p>
+            <div class="progress">
+                <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function toggleFields() {
+        const type = document.getElementById('data_type').value;
+        document.getElementById('individual-options').classList.toggle('hidden', type !== 'individual');
+    }
+
+    document.getElementById("upload-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const form = e.target;
+        const emp_id = 'user_' + Date.now();
+        const formData = new FormData(form);
+        formData.append("employee_id", emp_id);
+
+        const progressWrapper = document.getElementById("progress-bar-wrapper");
+        const progressBar = document.getElementById("progress-bar");
+        progressWrapper.classList.remove("hidden");
+
+        fetch("/start-process", { method: "POST", body: formData });
+
+        const dtype = formData.get("data_type");
+        let width = 0;
+        const fakeProgress = setInterval(() => {
+            if (width < 95) {
+                width += 1;
+                progressBar.style.width = width + "%";
+            }
+        }, 100);
+
+        const checkInterval = setInterval(() => {
+            fetch(`/check-status/${emp_id}`)
+                .then(res => res.text())
+                .then(status => {
+                    if (status === "done") {
+                        clearInterval(checkInterval);
+                        clearInterval(fakeProgress);
+                        progressBar.style.width = "100%";
+                        setTimeout(() => {
+                            window.location.href = `/results?emp_id=${emp_id}&dtype=${dtype}`;
+                        }, 500);
+                    }
+                    if (status === "error") {
+                        clearInterval(checkInterval);
+                        clearInterval(fakeProgress);
+                        alert("❌ Error during processing. Check server logs.");
+                    }
+                });
+        }, 2000);
+    });
+</script>
+</body>
+</html>

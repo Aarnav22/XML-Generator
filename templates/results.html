@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results - XML Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #3f51b5, #9c27b0, #e91e63);
+            color: white;
+            min-height: 100vh;
+        }
+        .results-container {
+            background: white;
+            color: #333;
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            max-width: 700px;
+            margin: 5rem auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .result-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .text-success { color: #2e7d32 !important; }
+        .text-danger { color: #c62828 !important; }
+    </style>
+</head>
+<body>
+    <div class="results-container text-center">
+        <h2 class="mb-4 text-primary">✅ Validation Completed</h2>
+        <div class="row mb-4">
+            <div class="col">
+                <div id="clean-count" class="result-number text-success">0</div>
+                <div>Clean Records</div>
+            </div>
+            <div class="col">
+                <div id="bad-count" class="result-number text-danger">0</div>
+                <div>Bad Records</div>
+            </div>
+        </div>
+        <hr>
+        <p><strong>Employee ID:</strong> {{ emp_id }}</p>
+        <p><strong>Data Type:</strong> {{ dtype|capitalize }}</p>
+        <a href="/" class="btn btn-outline-primary btn-lg mt-3">⬅️ Back to Upload</a>
+    </div>
+
+    <script>
+        function animateCount(id, target) {
+            const element = document.getElementById(id);
+            let current = 0;
+            const duration = 1000; // total animation duration in ms
+            const stepTime = 20;
+            const increment = Math.ceil(target / (duration / stepTime));
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = current;
+            }, stepTime);
+        }
+
+        const clean = JSON.parse('{{ clean | tojson }}');
+    const bad = JSON.parse('{{ bad | tojson }}');
+
+    window.onload = () => {
+        animateCount("clean-count", clean);
+        animateCount("bad-count", bad);
+    };
+</script>

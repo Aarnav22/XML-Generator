@@ -9,51 +9,49 @@
 
 ---
 
-## 📌 Project Overview
+## 📚 Table of Contents
 
-**XML Generator** is a versatile developer tool crafted to facilitate the validation, cleansing, and structured export of insurance data. It integrates web-based interfaces with backend processing routines to ensure data quality and readiness for downstream systems.
-
-This tool supports data cleaning, validation, categorization, and exporting to both XML and Excel formats — simplifying data exchange and integration.
-
----
-
-## 🎯 Key Features
-
-- ✅ **Data Validation & Cleansing** – Filters invalid entries and standardizes key fields  
-- ✅ **Export Support** – Export cleaned data to Excel and XML formats for easy sharing  
-- ✅ **User-Friendly Web Interface** – Upload, view, and manage data processing  
-- ✅ **Utility Functions** – Read Excel files, extract policy details, export datasets  
-- ✅ **CI/CD Friendly** – Easily integrable with automation workflows
+- [Overview](#overview)  
+- [Getting Started](#getting-started)  
+  - [Prerequisites](#prerequisites)  
+  - [Installation](#installation)  
+- [Usage](#usage)  
+- [Testing](#testing)
 
 ---
 
-## ⚙ Stack Used
+## 📌 Overview
 
-- **Backend:** Python  
-- **Interface:** HTML + Bootstrap  
-- **Packaging:** Conda  
-- **Database:** SQLite  
-- **Export Formats:** XML, Excel
+**XML Generator** is a versatile developer tool crafted to facilitate the validation, cleansing, and structured export of insurance data. It integrates web-based interfaces with backend processing routines to ensure data quality and readiness for downstream systems. The core features include robust data validation, categorization, and export to XML and Excel formats, making data sharing and integration seamless.
+
+### Why XML Generator?
+
+This project aims to simplify complex insurance data workflows. The core features include:
+
+- ✅ **Data Validation & Cleansing**: Ensures data accuracy by filtering invalid entries and standardizing key fields.  
+- ✅ **Export Capabilities**: Supports exporting cleaned data to Excel and XML formats for easy sharing and backup.  
+- ✅ **User-Friendly Web Interface**: Enables uploading, monitoring, and managing data processing tasks effortlessly.  
+- ✅ **Utility Functions**: Provides tools for exporting database records and reading Excel files, enhancing data portability.  
+- ✅ **Automation Support**: Integrates with CI/CD workflows to streamline project management and deployment.
 
 ---
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### 🧰 Prerequisites
 
-Ensure you have the following installed:
+This project requires the following dependencies:
 
-- Python 3.9+  
-- Conda (for environment management)
+- **Programming Language**: Python  
+- **Package Manager**: Conda
 
 ---
 
 ## 🛠 Installation
 
-Clone and install the project using Conda:
+Build XML Generator from the source and install dependencies.
+
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Aarnav22/XML-Generator.git
-cd XML-Generator
-conda env create -f conda.yml
-conda activate xml-generator
+git clone https://github.com/Aarnav22/XML-Generator
